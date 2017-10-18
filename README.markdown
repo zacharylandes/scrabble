@@ -1,6 +1,6 @@
 # Scrabble
 
-Work on the sample exercise defined below for 1 hour.
+Work on the sample exercise defined below for 2 hours.
 
 As you work, you may:
 
@@ -18,8 +18,10 @@ As you work, you should not:
 1. Fork this repository.
 2. Clone your new repository to your local machine (`$ git clone https://github.com/<YOUR GITHUB USERNAME>/scrabble.git`)
 3. `cd` into your scrabble directory.
-4. Run `bundle` from the command line.
-5. Run `rake` from the command line.
+4. run `gem install bundle` from the command line interface (CLI).
+5. Run `bundle` from the CLI.
+6. Run `rake` from the CLI.
+7. Open in atom and explore the code already available to you.
 
 ## Running Specs/Tests
 
@@ -64,10 +66,13 @@ When complete, your Scrabble class will be able to:
 4) score a word with letter multipliers,
 5) score word with a word multiplier,
 6) score a word with a seven-letter bonus.
+7) find the highest-scoring word from a list.
 
 ## Interaction Pattern
 
 Using test-driven development, implement an interaction pattern that scores words insensitive to case, such that an empty word or nil scores 0, which follows the interaction pattern below.
+
+### 1., 2., & 3. Score a Word, Empty String, and `nil`
 
 ```
 > game = Scrabble.new
@@ -80,20 +85,61 @@ Using test-driven development, implement an interaction pattern that scores word
 => 0
 ```
 
-Note: a double letter score in Scrabble is dependent on the position of a letter on the board. The arrays passed to `#score_with_multipliers` below indicate the multiplier for a letter in the corresponding position of the word that is passed as the first argument.
+### 4. Score a Word with Letter Multipliers
+
+A double letter score in Scrabble is dependent on the position of a letter on the board. The arrays passed to `#score_with_multipliers` below indicate the multiplier for a letter in the corresponding position of the word that is passed as the first argument.
 
 ```
 > game.score_with_multipliers('hello', [1,2,1,1,1])
 => 9
+```
+
+### 5. Score a Word with a Word Multiplier
+
+Word multipliers should be passed as an additional parameter like so: 
+
+```
 > game.score_with_multipliers('hello', [1,2,1,1,1], 2)
 => 18
 ```
 
-Additionally, a word scores a 10-point bonus (applied before the word multiplier) if that word has seven or more letters.
+### 6. Score a Word with a 7-Letter Bonus
+
+A word scores a 10-point bonus (applied before the word multiplier) if that word has seven or more letters.
 
 ```
 > game.score_with_multipliers('sparkle', [1,2,1,3,1,2,1], 2)
 => 58
+```
+
+### 7. Find the Highest-Scoring Word
+
+Implement a `highest_scoring_word` method that works like the examples below.
+
+```ruby
+game = Scrabble.new
+game.highest_scoring_word(['home', 'word', 'hello', 'sound'])  # => "home"
+```
+
+Note that it's better to use fewer tiles, so if the top score is tied between multiple words, pick the one with the fewest letters:
+
+```ruby
+game = Scrabble.new
+game.highest_scoring_word(['hello', 'word', 'sound'])  # => "word"
+```
+
+But there is a bonus for using all seven letters. If one of the highest scores uses all seven letters, pick that one:
+
+```ruby
+game = Scrabble.new
+game.highest_scoring_word(['home', 'word', 'silence'])  # => "silence"
+```
+
+But if the there are multiple words that are the same score and same length, pick the first one in supplied list:
+
+```ruby
+game = Scrabble.new
+game.highest_scoring_word(['hi', 'word', 'ward'])  # => "word"
 ```
 
 Use the existing `point_values` method in the `Scrabble` class as a source for each letter's value.
