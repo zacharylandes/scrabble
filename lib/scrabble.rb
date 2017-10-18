@@ -1,8 +1,43 @@
 class Scrabble
 
   def score(word)
-    1
+    @score = []
+    if word == nil || word == ""
+        return 0
+    else
+      @word = word.upcase.split('')
+      @word.map do |i|
+        point_values.each do |key, value|
+         @score << value if i == key
+        end
+      end
+     @score.sum
+    end
   end
+
+def score_with_multipliers(word, multiplier =1, word_multi = 1 )
+  multi = []
+  multi << 10 if word.length >6
+  score(word)
+    @score.each_with_index do |x,i|
+       multi.push(x * multiplier[i])
+    end
+  multi = multi.sum * word_multi
+end
+
+def highest_scoring_word(words)
+   max_score = {}
+   word_length = []
+     words.each do |word|
+       max_score[word] = score(word)
+     end
+     max_score.each do |k,v|
+       if v == max_score.max_by{|key,value| value}.pop
+        word_length <<  k
+       end
+     end
+  word_length.sort_by {|x| x.length}.shift
+end
 
   def point_values
     {
@@ -15,4 +50,8 @@ class Scrabble
       "Y"=>4, "Z"=>10
     }
   end
+
 end
+game = Scrabble.new
+# s.score("hello")
+game.highest_scoring_word([ 'word', 'hello', 'sound'])
